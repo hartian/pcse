@@ -200,6 +200,18 @@ class N_Crop_Dynamics(SimulationObject):
         checksum = abs(s.NuptakeTotal + s.NfixTotal +
                        (self.NamountLVI + self.NamountSTI + self.NamountRTI + self.NamountSOI) -
                        (s.NamountLV + s.NamountST + s.NamountRT + s.NamountSO + s.NlossesTotal))
+        
+        print("NuptakeTotal: " + str(s.NuptakeTotal))
+        print("NfixTotal: " + str(s.NfixTotal))
+        print("NamountLVI: " + str(self.NamountLVI))
+        print("NamountSTI: " + str(self.NamountSTI))
+        print("NamountRTI: " + str(self.NamountRTI))
+        print("NamountSOI: " + str(self.NamountSOI))
+        print("NamountLV: " + str(s.NamountLV))
+        print("NamountST: " + str(s.NamountST))
+        print("NuptakeTotal: " + str(s.NuptakeTotal))
+
+        print("checksum: " + str(checksum))
 
         if abs(checksum) >= 1.0:
             msg = "N flows not balanced on day %s\n" % day
