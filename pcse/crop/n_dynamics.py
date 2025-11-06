@@ -209,6 +209,9 @@ class N_Crop_Dynamics(SimulationObject):
         print("NamountSOI: " + str(self.NamountSOI))
         print("NamountLV: " + str(s.NamountLV))
         print("NamountST: " + str(s.NamountST))
+        print("NamountRT: " + str(s.NamountRT))
+        print("NamountSO: " + str(s.NamountSO))
+        print("NlossesTotal: " + str(s.NlossesTotal))
         print("NuptakeTotal: " + str(s.NuptakeTotal))
 
         print("checksum: " + str(checksum))
