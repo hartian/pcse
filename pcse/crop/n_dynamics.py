@@ -173,7 +173,7 @@ class N_Crop_Dynamics(SimulationObject):
         #rates.RNamountRT = k.RNuptakeRT - k.RNtranslocationRT - rates.RNdeathRT
         #rates.RNamountSO = k.RNuptakeSO + k.RNtranslocation        
         #rates.RNloss = rates.RNdeathLV + rates.RNdeathST + rates.RNdeathRT
-        
+
         rates.RNamountLV = k.RNuptakeLV + k.RNfixationLV - k.RNtranslocationLV - rates.RNdeathLV # Modified by Nadia Testani, Annimari Hartikainen and Taru Palosuo
         rates.RNamountST = k.RNuptakeST + k.RNfixationST - k.RNtranslocationST - rates.RNdeathST
         rates.RNamountRT = k.RNuptakeRT + k.RNfixationRT - k.RNtranslocationRT - rates.RNdeathRT
@@ -206,21 +206,6 @@ class N_Crop_Dynamics(SimulationObject):
         checksum = abs(s.NuptakeTotal + s.NfixTotal +
                        (self.NamountLVI + self.NamountSTI + self.NamountRTI + self.NamountSOI) -
                        (s.NamountLV + s.NamountST + s.NamountRT + s.NamountSO + s.NlossesTotal))
-
-        print("NuptakeTotal: " + str(s.NuptakeTotal))
-        print("NfixTotal: " + str(s.NfixTotal))
-        print("NamountLVI: " + str(self.NamountLVI))
-        print("NamountSTI: " + str(self.NamountSTI))
-        print("NamountRTI: " + str(self.NamountRTI))
-        print("NamountSOI: " + str(self.NamountSOI))
-        print("NamountLV: " + str(s.NamountLV))
-        print("NamountST: " + str(s.NamountST))
-        print("NamountRT: " + str(s.NamountRT))
-        print("NamountSO: " + str(s.NamountSO))
-        print("NlossesTotal: " + str(s.NlossesTotal))
-        print("NuptakeTotal: " + str(s.NuptakeTotal))
-
-        print("checksum: " + str(checksum))
 
         if abs(checksum) >= 1.0:
             msg = "N flows not balanced on day %s\n" % day
