@@ -166,7 +166,7 @@ class N_Crop_Dynamics(SimulationObject):
             rates.RNdeathRT= 0.
 
         # N rates in leaves, stems, root and storage organs computed as
-        # uptake - translocation - death.
+        # uptake + fixation - translocation - death. # Modified by Nadia Testani, Annimari Hartikainen and Taru Palosuo, uptake includes fixation
         # except for storage organs which only take up as a result of translocation.
         rates.RNamountLV = k.RNuptakeLV - k.RNtranslocationLV - rates.RNdeathLV
         rates.RNamountST = k.RNuptakeST - k.RNtranslocationST - rates.RNdeathST
