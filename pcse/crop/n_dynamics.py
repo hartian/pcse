@@ -166,18 +166,12 @@ class N_Crop_Dynamics(SimulationObject):
             rates.RNdeathRT= 0.
 
         # N rates in leaves, stems, root and storage organs computed as
-        # uptake - translocation - death.
+        # uptake + fixation - translocation - death. # Modified by Nadia Testani, Annimari Hartikainen and Taru Palosuo, uptake includes fixation
         # except for storage organs which only take up as a result of translocation.
-        #rates.RNamountLV = k.RNuptakeLV - k.RNtranslocationLV - rates.RNdeathLV
-        #rates.RNamountST = k.RNuptakeST - k.RNtranslocationST - rates.RNdeathST
-        #rates.RNamountRT = k.RNuptakeRT - k.RNtranslocationRT - rates.RNdeathRT
-        #rates.RNamountSO = k.RNuptakeSO + k.RNtranslocation        
-        #rates.RNloss = rates.RNdeathLV + rates.RNdeathST + rates.RNdeathRT
-
-        rates.RNamountLV = k.RNuptakeLV + k.RNfixationLV - k.RNtranslocationLV - rates.RNdeathLV # Modified by Nadia Testani, Annimari Hartikainen and Taru Palosuo
-        rates.RNamountST = k.RNuptakeST + k.RNfixationST - k.RNtranslocationST - rates.RNdeathST
-        rates.RNamountRT = k.RNuptakeRT + k.RNfixationRT - k.RNtranslocationRT - rates.RNdeathRT
-        rates.RNamountSO = k.RNuptakeSO + k.RNfixationSO + k.RNtranslocation        
+        rates.RNamountLV = k.RNuptakeLV - k.RNtranslocationLV - rates.RNdeathLV
+        rates.RNamountST = k.RNuptakeST - k.RNtranslocationST - rates.RNdeathST
+        rates.RNamountRT = k.RNuptakeRT - k.RNtranslocationRT - rates.RNdeathRT
+        rates.RNamountSO = k.RNuptakeSO + k.RNtranslocation        
         rates.RNloss = rates.RNdeathLV + rates.RNdeathST + rates.RNdeathRT
 
         self._check_N_balance(day)
