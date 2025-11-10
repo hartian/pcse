@@ -74,6 +74,10 @@ class N_Demand_Uptake(SimulationObject):
     RNuptakeRT     Rate of N uptake in roots                         Y   |kg N ha-1 d-1|
     RNuptakeSO     Rate of N uptake in storage organs                Y   |kg N ha-1 d-1|
     RNuptake       Total rate of N uptake                            Y   |kg N ha-1 d-1|
+    RNfixationLV   Rate of N fixation in leaves                      Y   |kg N ha-1 d-1|  # Added by Nadia Testani, Annimari Hartikainen and Taru Palosuo, N fixation rates in organs
+    RNfixationST   Rate of N fixation in stems                       Y   |kg N ha-1 d-1|
+    RNfixationRT   Rate of N fixation in roots                       Y   |kg N ha-1 d-1|
+    RNfixationSO   Rate of N fixation in storage organs              Y   |kg N ha-1 d-1|
     RNfixation     Rate of N fixation                                Y   |kg N ha-1 d-1|
     NdemandLV      N Demand in living leaves                         N   |kg N ha-1|
     NdemandST      N Demand in living stems                          N   |kg N ha-1|
@@ -126,6 +130,12 @@ class N_Demand_Uptake(SimulationObject):
         RNuptakeSO = Float(-99.)
 
         RNuptake = Float(-99.)  # Total N uptake rates [kg ha-1 d -1]
+
+        RNfixationLV = Float(-99.)  # Added by Nadia Testani, Annimari Hartikainen and Taru Palosuo, N fixation rates in organs [kg ha-1 d -1] 
+        RNfixationST = Float(-99.)
+        RNfixationRT = Float(-99.)
+        RNfixationSO = Float(-99.)
+
         RNfixation = Float(-99.)  # Total N fixated
 
         NdemandLV = Float(-99.)  # N demand in organs [kg ha-1]
@@ -152,8 +162,11 @@ class N_Demand_Uptake(SimulationObject):
         self.kiosk = kiosk
 
         self.rates = self.RateVariables(kiosk,
-            publish=["RNtranslocationLV", "RNtranslocationST", "RNtranslocationRT", "RNtranslocation", 
-                     "RNuptakeLV", "RNuptakeST", "RNuptakeRT", "RNuptakeSO","RNuptake", "RNfixation"])
+            #publish=["RNtranslocationLV", "RNtranslocationST", "RNtranslocationRT", "RNtranslocation", 
+            #         "RNuptakeLV", "RNuptakeST", "RNuptakeRT", "RNuptakeSO","RNuptake", "RNfixation"])
+            publish=["RNtranslocationLV", "RNtranslocationST", "RNtranslocationRT", "RNtranslocation", # Modified version by Nadia Testani, Annimari Hartikainen and Taru Palosuo
+                     "RNuptakeLV", "RNuptakeST", "RNuptakeRT", "RNuptakeSO", "RNuptake",
+                     "RNfixationLV", "RNfixationST", "RNfixationRT", "RNfixationSO", "RNfixation"])
 
         self.states = self.StateVariables(kiosk, NtranslocatableLV=0., NtranslocatableST=0., NtranslocatableRT=0., 
                                           Ntranslocatable=0., publish=["Ntranslocatable"])
@@ -216,21 +229,21 @@ class N_Demand_Uptake(SimulationObject):
             r.RNuptakeRT = 0.
             r.RNuptakeST = 0.
             r.RNuptakeSO = 0.
+            
+            r.RNfixationLV = 0. # Added by Nadia Testani, Annimari Hartikainen and Taru Palosuo
+            r.RNfixationRT = 0.
+            r.RNfixationST = 0.
+            r.RNfixationSO = 0.
         else:
-            r.RNuptakeLV = max(0.,max(r.NdemandLV/delt + r.RNtranslocationLV, r.RNuptake * (r.NdemandLV/delt + r.RNtranslocationLV) / r.Ndemand))
-            r.RNuptakeRT = max(0.,max(r.NdemandRT/delt + r.RNtranslocationRT, r.RNuptake * (r.NdemandRT/delt + r.RNtranslocationRT) / r.Ndemand))
-            r.RNuptakeST = max(0.,max(r.NdemandST/delt + r.RNtranslocationST, r.RNuptake * (r.NdemandST/delt + r.RNtranslocationST) / r.Ndemand))
-            r.RNuptakeSO = max(0.,max(r.NdemandSO/delt - r.RNtranslocation,   r.RNuptake * (r.NdemandSO/delt - r.RNtranslocation) / r.Ndemand))
+            r.RNuptakeLV = max(0.,min(r.NdemandLV/delt + r.RNtranslocationLV, r.RNuptake * (r.NdemandLV/delt + r.RNtranslocationLV) / r.Ndemand))
+            r.RNuptakeRT = max(0.,min(r.NdemandRT/delt + r.RNtranslocationRT, r.RNuptake * (r.NdemandRT/delt + r.RNtranslocationRT) / r.Ndemand))
+            r.RNuptakeST = max(0.,min(r.NdemandST/delt + r.RNtranslocationST, r.RNuptake * (r.NdemandST/delt + r.RNtranslocationST) / r.Ndemand))
+            r.RNuptakeSO = max(0.,min(r.NdemandSO/delt - r.RNtranslocation,   r.RNuptake * (r.NdemandSO/delt - r.RNtranslocation) / r.Ndemand))
 
-            #r.RNuptakeLV = max(0.,min(r.NdemandLV/delt + r.RNtranslocationLV, r.RNuptake * (r.NdemandLV/delt + r.RNtranslocationLV) / r.Ndemand))
-            #r.RNuptakeRT = max(0.,min(r.NdemandRT/delt + r.RNtranslocationRT, r.RNuptake * (r.NdemandRT/delt + r.RNtranslocationRT) / r.Ndemand))
-            #r.RNuptakeST = max(0.,min(r.NdemandST/delt + r.RNtranslocationST, r.RNuptake * (r.NdemandST/delt + r.RNtranslocationST) / r.Ndemand))
-            #r.RNuptakeSO = max(0.,min(r.NdemandSO/delt - r.RNtranslocation,   r.RNuptake * (r.NdemandSO/delt - r.RNtranslocation) / r.Ndemand))
-
-            #r.RNfixationLV = max(0.,min(r.NdemandLV/delt + r.RNtranslocationLV, r.RNfixation * (r.NdemandLV/delt + r.RNtranslocationLV) / r.Ndemand))
-            #r.RNfixationRT = max(0.,min(r.NdemandRT/delt + r.RNtranslocationRT, r.RNfixation * (r.NdemandRT/delt + r.RNtranslocationRT) / r.Ndemand))
-            #r.RNfixationST = max(0.,min(r.NdemandST/delt + r.RNtranslocationST, r.RNfixation * (r.NdemandST/delt + r.RNtranslocationST) / r.Ndemand))
-            #r.RNfixationSO = max(0.,min(r.NdemandSO/delt - r.RNtranslocation,   r.RNfixation * (r.NdemandSO/delt - r.RNtranslocation) / r.Ndemand))
+            r.RNfixationLV = max(0.,min(r.NdemandLV/delt + r.RNtranslocationLV, r.RNfixation * (r.NdemandLV/delt + r.RNtranslocationLV) / r.Ndemand)) # Added by Nadia Testani, Annimari Hartikainen and Taru Palosuo
+            r.RNfixationRT = max(0.,min(r.NdemandRT/delt + r.RNtranslocationRT, r.RNfixation * (r.NdemandRT/delt + r.RNtranslocationRT) / r.Ndemand))
+            r.RNfixationST = max(0.,min(r.NdemandST/delt + r.RNtranslocationST, r.RNfixation * (r.NdemandST/delt + r.RNtranslocationST) / r.Ndemand))
+            r.RNfixationSO = max(0.,min(r.NdemandSO/delt - r.RNtranslocation,   r.RNfixation * (r.NdemandSO/delt - r.RNtranslocation) / r.Ndemand))
 
     @prepare_states
     def integrate(self, day, delt=1.0):
